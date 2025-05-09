@@ -176,22 +176,22 @@ class PreprocessingToolkit():
 
     def generate_ROI(self, tumor_path, brain_path, type, output_path=None, parenchyma_path=None, radius=5, closing_size=2):
         '''
-        ------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------
         PARAMETER         DTYPE           DESCRIPTION
-        ------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------
         tumor_path      | string        | path to the NIfTY file containing tumor segmentation
         brain_path      | string        | path to the NIfTY file containing binary brain mask
         type            | string        | what ROI is to be generated, options:
-                        |               | "peritumoral" = around tumor mass, "periedemal" = around edema
+                        |               | "peritumoral" = around tumor mass, "periedematous" = around edema
         output_path     | string / None | path to where the output NIfTY file with ROI will be saved
                         |               | (if set to None, the file will not be saved)
         parenchyma_path | string / None | path to the NIfTY file containing brain parenchyma
                         |               | (if set to None, parenchyma is not masked)
         radius          | int           | thickness (i.e. distance from tumor/edema) of the ROI
         closing_size    | int           | size of the cube used for parenchyma closing
-        ------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------
         RETURN >> roi_nib - NIfTY image with ROI
-        ------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------
         Used to generate ROIs around tumors and edemas.
         '''
         # user info:
@@ -207,8 +207,8 @@ class PreprocessingToolkit():
         if type == "peritumoral":
             # mask for peritumoral ROI:
             tumor_mask = np.where(np.isin(tumor_nib.get_fdata(), [1, 4]), 1, 0)
-        elif type == "periedemal":
-            # mask for periedemal ROI:
+        elif type == "periedematous":
+            # mask for periedematous ROI:
             tumor_mask = np.where(tumor_nib.get_fdata() == 0, 0, 1)
         
         # 2) MAKE THE ROI -----------------------------------------------------

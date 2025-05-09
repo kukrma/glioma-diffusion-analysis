@@ -6,7 +6,7 @@
 # supervision:   doc. Ing. Roman MOUČEK, Ph.D.                                                         #
 #                doc. MUDr. Irena HOLEČKOVÁ, Ph.D. (consultant)                                        #
 # academic year: 2024/2025                                                                             #
-# last updated:  2025-05-07                                                                            #
+# last updated:  2025-05-09                                                                            #
 # ==================================================================================================== #
 # Python version      3.11.4
 import numpy as np  # 1.25.2
@@ -68,21 +68,21 @@ dwi_path = "data/preprocessed/dwi/UCSF-PDGM-0004_DWI.nii.gz"
 bval_path = "data/UCSF-PDGM/UCSF-PDGM_DTI.bval"
 bvec_path = "data/UCSF-PDGM/UCSF-PDGM_DTI.bvec"
 roi_path_peritumoral = "data/preprocessed/roi/peritumoral/UCSF-PDGM-0004_ROI_peritumoral.nii.gz"
-roi_path_periedemal = "data/preprocessed/roi/periedemal/UCSF-PDGM-0004_ROI_periedemal.nii.gz"
+roi_path_periedematous = "data/preprocessed/roi/periedematous/UCSF-PDGM-0004_ROI_periedematous.nii.gz"
 img_path = "data/UCSF-PDGM/PKG-UCSF-PDGM-v3-20230111/UCSF-PDGM-v3/UCSF-PDGM-0004_nifti/UCSF-PDGM-0004_T1_bias.nii.gz"
 tumor_path = "data/UCSF-PDGM/PKG-UCSF-PDGM-v3-20230111/UCSF-PDGM-v3/UCSF-PDGM-0004_nifti/UCSF-PDGM-0004_tumor_segmentation.nii.gz"
 # DTI visualization (peritumoral):
 dti_fit, _ = preprocessing.model_DTI(dwi_path, bval_path, bvec_path, roi_path_peritumoral)
 visualization.dti_ellipsoids(dti_fit, 100, img_path, tumor_path)
-# DTI visualization (periedemal):
-dti_fit, _ = preprocessing.model_DTI(dwi_path, bval_path, bvec_path, roi_path_periedemal)
+# DTI visualization (periedematous):
+dti_fit, _ = preprocessing.model_DTI(dwi_path, bval_path, bvec_path, roi_path_periedematous)
 visualization.dti_ellipsoids(dti_fit, 100, img_path, tumor_path)
 # CSD visualization (peritumoral):
 csd_fit, _ = preprocessing.model_CSD(dwi_path, bval_path, bvec_path, roi_path_peritumoral)
 visualization.csd_glyphs(csd_fit, 100, img_path, tumor_path)
 visualization.fodf_sphere(csd_fit, roi_path_peritumoral, 10000)
-# CSD visualization (periedemal):
-csd_fit, _ = preprocessing.model_CSD(dwi_path, bval_path, bvec_path, roi_path_periedemal)
+# CSD visualization (periedematous):
+csd_fit, _ = preprocessing.model_CSD(dwi_path, bval_path, bvec_path, roi_path_periedematous)
 visualization.csd_glyphs(csd_fit, 100, img_path, tumor_path)
 
 # 3) STRUCTURING ELEMENT ------------------------------------------------------

@@ -6,7 +6,7 @@
 # supervision:   doc. Ing. Roman MOUČEK, Ph.D.                                                         #
 #                doc. MUDr. Irena HOLEČKOVÁ, Ph.D. (consultant)                                        #
 # academic year: 2024/2025                                                                             #
-# last updated:  2025-05-07                                                                            #
+# last updated:  2025-05-09                                                                            #
 # ==================================================================================================== #
 # Python version      3.11.4
 import numpy as np  # 1.25.2
@@ -51,10 +51,10 @@ for subj in data["ID"]:
     brain_path = f"data/UCSF-PDGM/PKG-UCSF-PDGM-v3-20230111/UCSF-PDGM-v3/UCSF-PDGM-0{id}_nifti/UCSF-PDGM-0{id}_brain_segmentation.nii.gz"
     parenchyma_path = f"data/UCSF-PDGM/PKG-UCSF-PDGM-v3-20230111/UCSF-PDGM-v3/UCSF-PDGM-0{id}_nifti/UCSF-PDGM-0{id}_brain_parenchyma_segmentation.nii.gz"
     output_path_peritumoral = f"data/preprocessed/roi/peritumoral/UCSF-PDGM-0{id}_ROI_peritumoral.nii.gz"
-    output_path_periedemal = f"data/preprocessed/roi/periedemal/UCSF-PDGM-0{id}_ROI_periedemal.nii.gz"
+    output_path_periedematous = f"data/preprocessed/roi/periedematous/UCSF-PDGM-0{id}_ROI_periedematous.nii.gz"
     # generate ROIs:
     preprocessing.generate_ROI(tumor_path, brain_path, "peritumoral", output_path_peritumoral)
-    preprocessing.generate_ROI(tumor_path, brain_path, "periedemal", output_path_periedemal, parenchyma_path)
+    preprocessing.generate_ROI(tumor_path, brain_path, "periedematous", output_path_periedematous, parenchyma_path)
 end = time.time() # end time to measure overall time
 print(f">>> TOTAL ROI GENERATION TIME: {(end-start)/3600:.3f} h") # around 45 minutes
 
@@ -70,21 +70,21 @@ for subj in data["ID"]:
     # prepare paths using ID:
     dwi_path = f"data/preprocessed/dwi/UCSF-PDGM-0{id}_DWI.nii.gz"
     roi_path_peritumoral = f"data/preprocessed/roi/peritumoral/UCSF-PDGM-0{id}_ROI_peritumoral.nii.gz"
-    roi_path_periedemal = f"data/preprocessed/roi/periedemal/UCSF-PDGM-0{id}_ROI_periedemal.nii.gz"
+    roi_path_periedematous = f"data/preprocessed/roi/periedematous/UCSF-PDGM-0{id}_ROI_periedematous.nii.gz"
     output_path_csd_peritumoral = f"data/preprocessed/csd/peritumoral/UCSF-PDGM-0{id}_CSD_peritumoral.npy"
-    output_path_csd_periedemal = f"data/preprocessed/csd/periedemal/UCSF-PDGM-0{id}_CSD_periedemal.npy"
+    output_path_csd_periedematous = f"data/preprocessed/csd/periedematous/UCSF-PDGM-0{id}_CSD_periedematous.npy"
     output_path_dti_peritumoral = f"data/preprocessed/dti/peritumoral/UCSF-PDGM-0{id}_DTI_peritumoral.npy"
-    output_path_dti_periedemal = f"data/preprocessed/dti/periedemal/UCSF-PDGM-0{id}_DTI_periedemal.npy"
+    output_path_dti_periedematous = f"data/preprocessed/dti/periedematous/UCSF-PDGM-0{id}_DTI_periedematous.npy"
     # calculate CSD output for given ROIs:
     start = time.time()
     preprocessing.model_CSD(dwi_path, bval_path, bvec_path, roi_path_peritumoral, output_path_csd_peritumoral)
-    preprocessing.model_CSD(dwi_path, bval_path, bvec_path, roi_path_periedemal, output_path_csd_periedemal)
+    preprocessing.model_CSD(dwi_path, bval_path, bvec_path, roi_path_periedematous, output_path_csd_periedematous)
     end = time.time()
     csd_time += (end - start)/3600
     # calculate DTI output for given ROIs:
     start = time.time()
     preprocessing.model_DTI(dwi_path, bval_path, bvec_path, roi_path_peritumoral, output_path_dti_peritumoral)
-    preprocessing.model_DTI(dwi_path, bval_path, bvec_path, roi_path_periedemal, output_path_dti_periedemal)
+    preprocessing.model_DTI(dwi_path, bval_path, bvec_path, roi_path_periedematous, output_path_dti_periedematous)
     end = time.time()
     dti_time += (end - start)/3600
 print(f">>> TOTAL CSD COMPUTATION TIME: {csd_time:.3f} h") # around 10 h
@@ -96,7 +96,7 @@ columns = ["ID", "Sex", "Age", "Grade", "Type", "MGMTstatus", "MGMTindex", "1p/1
            "Ratio", "NE", "GFAmed", "GFAiqr", "MAGmed", "MAGiqr",                                                               # from the CSD model
            "FAmed", "FAiqr", "MDmed", "MDiqr", "RDmed", "RDiqr", "ADmed", "ADiqr"]                                              # from the DTI model
 df_peritumoral = pd.DataFrame(columns=columns).set_index("ID")
-df_periedemal = df_peritumoral.copy()
+df_periedematous = df_peritumoral.copy()
 # correct the original data:
 data["1p/19q"] = data["1p/19q"].replace("Co-deletion", "co-deletion")
 # loop through all subject IDs:
@@ -104,25 +104,25 @@ for i, subj in enumerate(data["ID"]):
     id = subj[-3:] # use only the last three numbers (CSV uses three numbers to determine subject, files are named with four numbers)
     # prepare paths using the ID:
     peritumoral_csd_path = f"data/preprocessed/csd/peritumoral/UCSF-PDGM-0{id}_CSD_peritumoral.npy"
-    periedemal_csd_path = f"data/preprocessed/csd/periedemal/UCSF-PDGM-0{id}_CSD_periedemal.npy"
+    periedematous_csd_path = f"data/preprocessed/csd/periedematous/UCSF-PDGM-0{id}_CSD_periedematous.npy"
     peritumoral_dti_path = f"data/preprocessed/dti/peritumoral/UCSF-PDGM-0{id}_DTI_peritumoral.npy"
-    periedemal_dti_path = f"data/preprocessed/dti/periedemal/UCSF-PDGM-0{id}_DTI_periedemal.npy"
+    periedematous_dti_path = f"data/preprocessed/dti/periedematous/UCSF-PDGM-0{id}_DTI_periedematous.npy"
     # check if the file with CSD peritumoral results exits:
     if os.path.exists(peritumoral_csd_path):
         row_peritumoral_csd = np.load(peritumoral_csd_path)
     else: row_peritumoral_csd = [np.nan]*6
-    # check if the file with CSD periedemal results exits:
-    if os.path.exists(periedemal_csd_path):
-        row_periedemal_csd = np.load(periedemal_csd_path)
-    else: row_periedemal_csd = [np.nan]*6
+    # check if the file with CSD periedematous results exits:
+    if os.path.exists(periedematous_csd_path):
+        row_periedematous_csd = np.load(periedematous_csd_path)
+    else: row_periedematous_csd = [np.nan]*6
     # check if the file with DTI peritumoral results exits:
     if os.path.exists(peritumoral_dti_path):
         row_peritumoral_dti = np.load(peritumoral_dti_path)
     else: row_peritumoral_dti = [np.nan]*8
-    # check if the file with DTI periedemal results exits:
-    if os.path.exists(periedemal_dti_path):
-        row_periedemal_dti = np.load(periedemal_dti_path)
-    else: row_periedemal_dti = [np.nan]*8
+    # check if the file with DTI periedematous results exits:
+    if os.path.exists(periedematous_dti_path):
+        row_periedematous_dti = np.load(periedematous_dti_path)
+    else: row_periedematous_dti = [np.nan]*8
     # assemble full dataframe rows:
     row_peritumoral = {
         "ID": subj,
@@ -152,7 +152,7 @@ for i, subj in enumerate(data["ID"]):
         "RDiqr": row_peritumoral_dti[5],
         "ADmed": row_peritumoral_dti[6],
         "ADiqr": row_peritumoral_dti[7]}
-    row_periedemal = {
+    row_periedematous = {
         "ID": subj,
         "Sex": data.iloc[i, 1],
         "Age": data.iloc[i, 2],
@@ -166,23 +166,23 @@ for i, subj in enumerate(data["ID"]):
         "OS": data.iloc[i, 10],
         "EoR": data.iloc[i, 11],
         "Biopsy": data.iloc[i, 12],
-        "Ratio": row_periedemal_csd[0],
-        "NE": row_periedemal_csd[1],
-        "GFAmed": row_periedemal_csd[2],
-        "GFAiqr": row_periedemal_csd[3],
-        "MAGmed": row_periedemal_csd[4],
-        "MAGiqr": row_periedemal_csd[5],
-        "FAmed": row_periedemal_dti[0],
-        "FAiqr": row_periedemal_dti[1],
-        "MDmed": row_periedemal_dti[2],
-        "MDiqr": row_periedemal_dti[3],
-        "RDmed": row_periedemal_dti[4],
-        "RDiqr": row_periedemal_dti[5],
-        "ADmed": row_periedemal_dti[6],
-        "ADiqr": row_periedemal_dti[7]}
+        "Ratio": row_periedematous_csd[0],
+        "NE": row_periedematous_csd[1],
+        "GFAmed": row_periedematous_csd[2],
+        "GFAiqr": row_periedematous_csd[3],
+        "MAGmed": row_periedematous_csd[4],
+        "MAGiqr": row_periedematous_csd[5],
+        "FAmed": row_periedematous_dti[0],
+        "FAiqr": row_periedematous_dti[1],
+        "MDmed": row_periedematous_dti[2],
+        "MDiqr": row_periedematous_dti[3],
+        "RDmed": row_periedematous_dti[4],
+        "RDiqr": row_periedematous_dti[5],
+        "ADmed": row_periedematous_dti[6],
+        "ADiqr": row_periedematous_dti[7]}
     # append the rows to dataframes:
     df_peritumoral.loc[len(df_peritumoral)] = row_peritumoral
-    df_periedemal.loc[len(df_periedemal)] = row_periedemal
+    df_periedematous.loc[len(df_periedematous)] = row_periedematous
 # save the dataframes as CSV:
 preprocessing.change_labels(df_peritumoral, "Type", ["A-IDHmut", "A-IDHwt", "G-IDHwt", "O-IDHmut"]).to_csv("data/preprocessed/peritumoral.csv")
-preprocessing.change_labels(df_periedemal, "Type", ["A-IDHmut", "A-IDHwt", "G-IDHwt", "O-IDHmut"]).to_csv("data/preprocessed/periedemal.csv")
+preprocessing.change_labels(df_periedematous, "Type", ["A-IDHmut", "A-IDHwt", "G-IDHwt", "O-IDHmut"]).to_csv("data/preprocessed/periedematous.csv")
