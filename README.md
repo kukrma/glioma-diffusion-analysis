@@ -1,4 +1,4 @@
-# Analysis of Peritumoral and Periedemal Diffusion Properties in Brain Gliomas Using the UCSF-PDGM Dataset
+# Analysis of Peritumoral and Periedematous Diffusion Properties in Brain Gliomas Using the UCSF-PDGM Dataset
 This GitHub repository contains the code and derived data for the diploma thesis *Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors* produced at the **Department of Computer Science and Engineering, Faculty of Applied Sciences, University of West Bohemia**. The thesis is scheduled to be defended in June 2025.
 
 [![CC BY-NC 4.0][cc-by-nc-shield]][cc-by-nc]
@@ -35,7 +35,7 @@ With everything prepared, the code should be ready to use. Given that the data-s
 
 [<img src="https://img.shields.io/badge/TCIA-10.7937/tcia.bdgf--8v37-%23e41154">](https://doi.org/10.7937/tcia.bdgf-8v37)
 
-For a reader who is interested only in the analytical stage of the workflow, the derived preprocessed diffusion properties are provided via `peritumoral.csv` and `periedemal.csv` files (see below for more details).
+For a reader who is interested only in the analytical stage of the workflow, the derived preprocessed diffusion properties are provided via `peritumoral.csv` and `periedematous.csv` files (see below for more details).
 
 The source code files contain many comments with descriptions of individual steps and parameters used by the defined classes and their methods. Applying the analysis to other brain diffusion MRI datasets should be possible, but will need additional adjustments based on the analyzed data.
 
@@ -88,18 +88,18 @@ DPthesis/
 ├── data/
 │   ├── preprocessed/
 │   │   ├── csd/
-│   │   │   ├── periedemal/
-│   │   │   │   ├── UCSF-PDGM-0004_CSD_periedemal.npy
-│   │   │   │   ├── UCSF-PDGM-0005_CSD_periedemal.npy
+│   │   │   ├── periedematous/
+│   │   │   │   ├── UCSF-PDGM-0004_CSD_periedematous.npy
+│   │   │   │   ├── UCSF-PDGM-0005_CSD_periedematous.npy
 │   │   │   │   └── ...
 │   │   │   └── peritumoral/
 │   │   │       ├── UCSF-PDGM-0004_CSD_peritumoral.npy
 │   │   │       ├── UCSF-PDGM-0005_CSD_peritumoral.npy
 │   │   │       └── ...
 │   │   ├── dti/
-│   │   │   ├── periedemal/
-│   │   │   │   ├── UCSF-PDGM-0004_DTI_periedemal.npy
-│   │   │   │   ├── UCSF-PDGM-0005_DTI_periedemal.npy
+│   │   │   ├── periedematous/
+│   │   │   │   ├── UCSF-PDGM-0004_DTI_periedematous.npy
+│   │   │   │   ├── UCSF-PDGM-0005_DTI_periedematous.npy
 │   │   │   │   └── ...
 │   │   │   └── peritumoral/
 │   │   │       ├── UCSF-PDGM-0004_DTI_peritumoral.npy
@@ -110,15 +110,15 @@ DPthesis/
 │   │   │   ├── UCSF-PDGM-0005_DWI.nii.gz
 │   │   │   └── ...
 │   │   ├── roi/
-│   │   │   ├── periedemal/
-│   │   │   │   ├── UCSF-PDGM-0004_ROI_periedemal.nii.gz
-│   │   │   │   ├── UCSF-PDGM-0005_ROI_periedemal.nii.gz
+│   │   │   ├── periedematous/
+│   │   │   │   ├── UCSF-PDGM-0004_ROI_periedematous.nii.gz
+│   │   │   │   ├── UCSF-PDGM-0005_ROI_periedematous.nii.gz
 │   │   │   │   └── ...
 │   │   │   └── peritumoral/
 │   │   │       ├── UCSF-PDGM-0004_ROI_peritumoral.nii.gz
 │   │   │       ├── UCSF-PDGM-0005_ROI_peritumoral.nii.gz
 │   │   │       └── ...
-│   │   ├── periedemal.csv
+│   │   ├── periedematous.csv
 │   │   └── peritumoral.csv
 │   └── UCSF-PDGM/
 │       ├── PKG-UCSF-PDGM-v3-20230111/
@@ -160,37 +160,37 @@ DPthesis/
 ```
 
 ## Preprocessed Data
-In addition to the source code, the derived diffusion properties in peritumoral and periedemal ROIs are provided. Although the UCSF-PDGM dataset is publicly available and therefore the entire workflow should be reproducible, the image processing stage (i.e. the chapter in the thesis named *4. Image Processing*) can take few tens of hours to complete (depending on the hardware capabilities of the reader), and so readers interested only in the analytical stage (i.e. the chapter in the thesis named *5. Analysis of Diffusion Properties*) would be hindered by the need to first perform the image processing stage. Therefore, the computed diffusion properties are provided, as they present a major milestone in the analysis.
+In addition to the source code, the derived diffusion properties in peritumoral and periedematous ROIs are provided. Although the UCSF-PDGM dataset is publicly available and therefore the entire workflow should be reproducible, the image processing stage (i.e. the chapter in the thesis named *4. Image Processing*) can take few tens of hours to complete (depending on the hardware capabilities of the reader), and so readers interested only in the analytical stage (i.e. the chapter in the thesis named *5. Analysis of Diffusion Properties*) would be hindered by the need to first perform the image processing stage. Therefore, the computed diffusion properties are provided, as they present a major milestone in the analysis.
 
-Both the `peritumoral.csv` and `periedemal.csv` files contain the same clinical markers and the diffusion properties, only for different regions (i.e. peritumoral or periedemal ROIs) based on their name. Specifically, the attributes are:
-| ATTRIBUTE    | TYPE    | ORIGIN    | DESCRIPTION                                                                                                                    |
-| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| *ID*         | ordinal | UCSF-PDGM | unique identification of the subject                                                                                           |
-| *Sex*        | nominal | UCSF-PDGM | sex of the subject                                                                                                             |
-| *Age*        | integer | UCSF-PDGM | age in years at time of imaging                                                                                                |
-| *Grade*      | ordinal | UCSF-PDGM | grade based on the WHO CNS5                                                                                                    |
-| *Type*       | nominal | UCSF-PDGM | final pathologic diagnosis based on the WHO CNS5                                                                               |
-| *MGMTstatus* | nominal | UCSF-PDGM | status of the MGMT biomarker                                                                                                   |
-| *MGMTindex*  | integer | UCSF-PDGM | index developed at UCSF indicating the number of promoter methylation sites                                                    |
-| *1p/19q*     | nominal | UCSF-PDGM | status of of 1p and 19q genes, assayed by fluorescent in-situ hybridization                                                    |
-| *IDH*        | nominal | UCSF-PDGM | IDH subtype characterized with a capture-based targeted next-generation DNA sequencing panel                                   |
-| *AliveDead*  | binary  | UCSF-PDGM | survival at last clinical follow up                                                                                            |
-| *OS*         | integer | UCSF-PDGM | OS in days from initial diagnosis to last clinical follow up                                                                   |
-| *EoR*        | nominal | UCSF-PDGM | extent of resection determined by review of operative reports and immediate postoperative imaging                              |
-| *Biopsy*     | binary  | UCSF-PDGM | if burr hole biopsy was performed                                                                                              |
-| *Ratio*      | float   | CSD       | ratio between smallest versus largest eigenvalue of the response function (identical for both periedemal and peritumoral data) |
-| *NE*         | float   | CSD       | normalized entropy                                                                                                             |
-| *GFAmed*     | float   | CSD       | median of GFA in ROI                                                                                                           |
-| *GFAiqr*     | float   | CSD       | IQR of GFA in ROI                                                                                                              |
-| *MAGmed*     | float   | CSD       | median of MAG in ROI                                                                                                           |
-| *MAGiqr*     | float   | CSD       | IQR of MAG in ROI                                                                                                              |
-| *FAmed*      | float   | DTI       | median of FA in ROI                                                                                                            |
-| *FAiqr*      | float   | DTI       | IQR of FA in ROI                                                                                                               |
-| *MDmed*      | float   | DTI       | median of MD in ROI                                                                                                            |
-| *MDiqr*      | float   | DTI       | IQR of MD in ROI                                                                                                               |
-| *RDmed*      | float   | DTI       | median of RD in ROI                                                                                                            |
-| *RDiqr*      | float   | DTI       | IQR of RD in ROI                                                                                                               |
-| *ADmed*      | float   | DTI       | median of AD in ROI                                                                                                            |
-| *ADiqr*      | float   | DTI       | IQR of AD in ROI                                                                                                               |
+Both the `peritumoral.csv` and `periedematous.csv` files contain the same clinical markers and the diffusion properties, only for different regions (i.e. peritumoral or periedematous ROIs) based on their name. Specifically, the attributes are:
+| ATTRIBUTE    | TYPE    | ORIGIN    | DESCRIPTION                                                                                                                       |
+| ------------ | ------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| *ID*         | ordinal | UCSF-PDGM | unique identification of the subject                                                                                              |
+| *Sex*        | nominal | UCSF-PDGM | sex of the subject                                                                                                                |
+| *Age*        | integer | UCSF-PDGM | age in years at time of imaging                                                                                                   |
+| *Grade*      | ordinal | UCSF-PDGM | grade based on the WHO CNS5                                                                                                       |
+| *Type*       | nominal | UCSF-PDGM | final pathologic diagnosis based on the WHO CNS5                                                                                  |
+| *MGMTstatus* | nominal | UCSF-PDGM | status of the MGMT biomarker                                                                                                      |
+| *MGMTindex*  | integer | UCSF-PDGM | index developed at UCSF indicating the number of promoter methylation sites                                                       |
+| *1p/19q*     | nominal | UCSF-PDGM | status of of 1p and 19q genes, assayed by fluorescent in-situ hybridization                                                       |
+| *IDH*        | nominal | UCSF-PDGM | IDH subtype characterized with a capture-based targeted next-generation DNA sequencing panel                                      |
+| *AliveDead*  | binary  | UCSF-PDGM | survival at last clinical follow up                                                                                               |
+| *OS*         | integer | UCSF-PDGM | OS in days from initial diagnosis to last clinical follow up                                                                      |
+| *EoR*        | nominal | UCSF-PDGM | extent of resection determined by review of operative reports and immediate postoperative imaging                                 |
+| *Biopsy*     | binary  | UCSF-PDGM | if burr hole biopsy was performed                                                                                                 |
+| *Ratio*      | float   | CSD       | ratio between smallest versus largest eigenvalue of the response function (identical for both periedematous and peritumoral data) |
+| *NE*         | float   | CSD       | normalized entropy                                                                                                                |
+| *GFAmed*     | float   | CSD       | median of GFA in ROI                                                                                                              |
+| *GFAiqr*     | float   | CSD       | IQR of GFA in ROI                                                                                                                 |
+| *MAGmed*     | float   | CSD       | median of MAG in ROI                                                                                                              |
+| *MAGiqr*     | float   | CSD       | IQR of MAG in ROI                                                                                                                 |
+| *FAmed*      | float   | DTI       | median of FA in ROI                                                                                                               |
+| *FAiqr*      | float   | DTI       | IQR of FA in ROI                                                                                                                  |
+| *MDmed*      | float   | DTI       | median of MD in ROI                                                                                                               |
+| *MDiqr*      | float   | DTI       | IQR of MD in ROI                                                                                                                  |
+| *RDmed*      | float   | DTI       | median of RD in ROI                                                                                                               |
+| *RDiqr*      | float   | DTI       | IQR of RD in ROI                                                                                                                  |
+| *ADmed*      | float   | DTI       | median of AD in ROI                                                                                                               |
+| *ADiqr*      | float   | DTI       | IQR of AD in ROI                                                                                                                  |
 
 The detailed description including formulas and explained abbreviations is provided in the thesis.
