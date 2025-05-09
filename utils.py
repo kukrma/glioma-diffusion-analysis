@@ -6,7 +6,7 @@
 # supervision:   doc. Ing. Roman MOUČEK, Ph.D.                                                         #
 #                doc. MUDr. Irena HOLEČKOVÁ, Ph.D. (consultant)                                        #
 # academic year: 2024/2025                                                                             #
-# last updated:  2025-05-07                                                                            #
+# last updated:  2025-05-09                                                                            #
 # ==================================================================================================== #
 # ------------------------- #
 # Python version   3.11.4   #
@@ -1234,6 +1234,8 @@ class AnalysisToolkit():
                 plt.contour(x_grid, y_grid, pdf, levels=10, cmap=cmap, zorder=2)  # Unique color for each component
                 compo += 1
             # save the plot:
+            plt.xlabel("Embedding1")
+            plt.ylabel("Embedding2")
             plt.legend(loc="upper right")
             plt.savefig(f"./img/gmm_components_{plots_name}.pdf", format="pdf", bbox_inches="tight")
             plt.close()
