@@ -1,5 +1,7 @@
 # Analysis of Peritumoral and Periedematous Diffusion Properties in Brain Gliomas Using the UCSF-PDGM Dataset
-This GitHub repository contains the code and derived data for the diploma thesis *Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors* produced at the **Department of Computer Science and Engineering, Faculty of Applied Sciences, University of West Bohemia**. The thesis was successfully defended on 16th June 2025.
+This GitHub repository contains the code and derived data for the diploma thesis *Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors* produced at the **Department of Computer Science and Engineering, Faculty of Applied Sciences, University of West Bohemia**. The thesis was successfully defended on 16th June 2025 and can be accessed from URL:
+
+[<img src="https://img.shields.io/badge/UWB-ID 99620-royalblue.svg?logo=LOGO">](https://portal.zcu.cz/StagPortletsJSR168/CleanUrl?urlid=prohlizeni-prace-detail&praceIdno=99620)
 
 [![CC BY-NC 4.0][cc-by-nc-shield]][cc-by-nc]
 
