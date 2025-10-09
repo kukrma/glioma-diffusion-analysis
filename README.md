@@ -1,5 +1,7 @@
 # Analysis of Peritumoral and Periedematous Diffusion Properties in Brain Gliomas Using the UCSF-PDGM Dataset
-This GitHub repository contains the code and derived data for the diploma thesis *Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors* produced at the **Department of Computer Science and Engineering, Faculty of Applied Sciences, University of West Bohemia**. The thesis was successfully defended on 16th June 2025 and can be accessed from URL:
+This GitHub repository contains the code and derived data related to the academic article *Peritumoral White Matter Diffusion Properties Indicate Latent Glioma Subtypes*, which is currently in works. Once published, the necessary links to the article will be added.
+
+The code was originally used in the diploma thesis *Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors* produced at the **Department of Computer Science and Engineering, Faculty of Applied Sciences, University of West Bohemia**, from which the academic article is derived. Because the code may evolve over time, the state of this repository during thesis submission and defense is archived in the form of a release. The thesis was successfully defended on 16th June 2025 and can be accessed from URL:
 
 [<img src="https://img.shields.io/badge/UWB-ID 99620-royalblue.svg?logo=LOGO">](https://portal.zcu.cz/StagPortletsJSR168/CleanUrl?urlid=prohlizeni-prace-detail&praceIdno=99620)
 
@@ -33,7 +35,7 @@ To use this code, you first need to install Python on your computer and optional
 | tqdm         | 4.66.1      |
 | umap-learn   | 0.5.7       |
 
-With everything prepared, the code should be ready to use. Given that the data-specific nature of the analysis, the code is not fully generalized, but tailored specifically to the publicly available **UCSF-PDGM dataset**, which can be downloaded from the following link:
+With everything prepared, the code should be ready to use. Given the data-specific nature of the analysis, the code is not fully generalized, but tailored specifically to the publicly available **UCSF-PDGM dataset (Version 4)**, which can be downloaded from the following link:
 
 [<img src="https://img.shields.io/badge/TCIA-10.7937/tcia.bdgf--8v37-%23e41154">](https://doi.org/10.7937/tcia.bdgf-8v37)
 
@@ -162,9 +164,9 @@ DPthesis/
 ```
 
 ## Preprocessed Data
-In addition to the source code, the derived diffusion properties in peritumoral and periedematous ROIs are provided. Although the UCSF-PDGM dataset is publicly available and therefore the entire workflow should be reproducible, the image processing stage (i.e. the chapter in the thesis named *4. Image Processing*) can take few tens of hours to complete (depending on the hardware capabilities of the reader), and so readers interested only in the analytical stage (i.e. the chapter in the thesis named *5. Analysis of Diffusion Properties*) would be hindered by the need to first perform the image processing stage. Therefore, the computed diffusion properties are provided, as they present a major milestone in the analysis.
+In addition to the source code, the derived diffusion properties in peritumoral and periedematous ROIs are provided. Although the UCSF-PDGM dataset is publicly available and therefore the entire workflow should be reproducible, the image processing stage will likely take more than ten hours to complete (depending on available hardware), and so readers interested only in the analytical stage would be hindered by the need to first perform the image processing stage. Therefore, the computed diffusion properties are provided, as they present a major milestone in the analysis.
 
-Both the `peritumoral.csv` and `periedematous.csv` files contain the same clinical markers and the diffusion properties, only for different regions (i.e. peritumoral or periedematous ROIs) based on their name. Specifically, the attributes are:
+Both the `peritumoral.csv` and `periedematous.csv` files contain the same clinical markers and the diffusion properties, only for different regions (i.e., peritumoral or periedematous ROIs) based on their name. Specifically, the attributes are:
 | ATTRIBUTE    | TYPE    | ORIGIN    | DESCRIPTION                                                                                                                       |
 | ------------ | ------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | *ID*         | ordinal | UCSF-PDGM | unique identification of the subject                                                                                              |
@@ -195,4 +197,4 @@ Both the `peritumoral.csv` and `periedematous.csv` files contain the same clinic
 | *ADmed*      | float   | DTI       | median of AD in ROI                                                                                                               |
 | *ADiqr*      | float   | DTI       | IQR of AD in ROI                                                                                                                  |
 
-The detailed description including formulas and explained abbreviations is provided in the thesis.
+The detailed description including formulas and explained abbreviations is provided in the academic article or in the thesis.
