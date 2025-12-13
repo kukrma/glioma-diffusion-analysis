@@ -1,13 +1,3 @@
-# ==================================================================================================== #
-# --- DIPLOMA THESIS (analysis.py) ------------------------------------------------------------------- #
-# ==================================================================================================== #
-# title:         Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors #
-# author:        Bc. Martin KUKRÁL                                                                     #
-# supervision:   doc. Ing. Roman MOUČEK, Ph.D.                                                         #
-#                doc. MUDr. Irena HOLEČKOVÁ, Ph.D. (consultant)                                        #
-# academic year: 2024/2025                                                                             #
-# last updated:  2025-05-09                                                                            #
-# ==================================================================================================== #
 # Python version      3.11.4
 import pandas as pd # 2.1.0
 import utils        # script
@@ -18,11 +8,13 @@ analysis = utils.AnalysisToolkit()
 
 
 
-
 # 1) LOAD THE DATA ------------------------------------------------------------
 df_peritumoral = pd.read_csv("data/preprocessed/peritumoral.csv")     # peritumoral region
 df_periedematous = pd.read_csv("data/preprocessed/periedematous.csv") # periedematous region
 indices = range(14, 27)                                               # indices of diffusion data
+# print number of samples:
+print("samples with all peritumoral diffusion properties:   ", len(df_peritumoral.dropna(subset="GFAmed")))
+print("samples with all periedematous diffusion properties: ", len(df_periedematous.dropna(subset="GFAmed")))
 
 # 2) EXPLORATORY ANALYSIS -----------------------------------------------------
 # plot the ratios:
@@ -39,8 +31,8 @@ analysis.correlation(df_periedematous, indices, True, "corr_dcorr_periedematous"
 
 # 3) MANIFOLD LEARNING --------------------------------------------------------
 # extend the datasets with 2D UMAP embeddings (each takes around 1.5 minutes):
-params_peritumoral = ["euclidean", 6, 0.185664993078593]     # optimal parameters from a previous run (peritumoral UMAP)
-params_periedematous = ["euclidean", 7, 0.13583387128117366] # optimal parameters from a previous run (periedematous UMAP)
+params_peritumoral = ["euclidean", 9, 0.2543302859135638]   # optimal parameters from a previous run (peritumoral UMAP)
+params_periedematous = ["euclidean", 6, 0.2810460850731149] # optimal parameters from a previous run (periedematous UMAP)
 df_peritumoral = analysis.umap_manifold(df_peritumoral, indices, n_trials=100, plots_name="peritumoral", params=params_peritumoral)         # remove "params" to repeat optimization
 df_periedematous = analysis.umap_manifold(df_periedematous, indices, n_trials=100, plots_name="periedematous", params=params_periedematous) # remove "params" to repeat optimization
 # better readability:

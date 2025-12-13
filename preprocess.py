@@ -1,13 +1,3 @@
-# ==================================================================================================== #
-# --- DIPLOMA THESIS (preprocess.py) ----------------------------------------------------------------- #
-# ==================================================================================================== #
-# title:         Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors #
-# author:        Bc. Martin KUKRÁL                                                                     #
-# supervision:   doc. Ing. Roman MOUČEK, Ph.D.                                                         #
-#                doc. MUDr. Irena HOLEČKOVÁ, Ph.D. (consultant)                                        #
-# academic year: 2024/2025                                                                             #
-# last updated:  2025-05-09                                                                            #
-# ==================================================================================================== #
 # Python version      3.11.4
 import numpy as np  # 1.25.2
 import pandas as pd # 2.1.0
@@ -22,9 +12,10 @@ preprocessing = utils.PreprocessingToolkit()
 
 
 # 1) PREPARE IDs --------------------------------------------------------------
-repeated = ("UCSF-PDGM-315", "UCSF-PDGM-278", "UCSF-PDGM-175", "UCSF-PDGM-138", "UCSF-PDGM-181", "UCSF-PDGM-289")
+repeated = [315, 278, 175, 138, 181, 289]
+remove = [f"UCSF-PDGM-{num}" for num in repeated]
 data = pd.read_csv("./data/UCSF-PDGM/UCSF-PDGM-metadata_v2.csv").drop(columns=["BraTS21 ID", "BraTS21 Segmentation Cohort", "BraTS21 MGMT Cohort"])
-data = data[~data["ID"].isin(repeated)] # data cleared of IDs corresponding to the duplicate subjects (follow-up imaging)
+data = data[~data["ID"].isin(remove)] # data cleared of IDs corresponding to the duplicate subjects (follow-up imaging)
 
 # 2) REGISTRATION -------------------------------------------------------------
 start = time.time() # start time to measure the overall time
@@ -91,6 +82,15 @@ print(f">>> TOTAL CSD COMPUTATION TIME: {csd_time:.3f} h") # around 10 h
 print(f">>> TOTAL DTI COMPUTATION TIME: {dti_time:.3f} h") # around 1.6 h
 
 # 5) COMBINE EVERYTHING INTO A CSV FILE =======================================
+# subjects with distorted DWIs in ROIs:
+wrong = [43, 57, 66, 111, 158, 161, 166, 174, 179, 185, 195, 200, 201, 202, 208, 214, 223, 229,
+         267, 269, 270, 272, 291, 303, 307, 312, 318, 321, 327, 342, 347, 358, 364, 367, 391,
+         418, 420, 423, 438, 439, 442, 468, 477, 498, 507, 511, 517, 524, 533, 534, 535]
+# subjects that are distorted, but can be used for the peritumoral analysis:
+onlyPT = [111, 158, 174, 195, 200, 208, 321, 347, 364, 367, 391, 507, 533]
+# remove all wrong subjects from the dataframe:
+remove_wrong = [f"UCSF-PDGM-{num}" for num in wrong]
+data = data[~data["ID"].isin(remove_wrong)]
 # prepare the dataframes:
 columns = ["ID", "Sex", "Age", "Grade", "Type", "MGMTstatus", "MGMTindex", "1p/19q", "IDH", "AliveDead", "OS", "EoR", "Biopsy", # from the original data
            "Ratio", "NE", "GFAmed", "GFAiqr", "MAGmed", "MAGiqr",                                                               # from the CSD model
@@ -111,17 +111,21 @@ for i, subj in enumerate(data["ID"]):
     if os.path.exists(peritumoral_csd_path):
         row_peritumoral_csd = np.load(peritumoral_csd_path)
     else: row_peritumoral_csd = [np.nan]*6
-    # check if the file with CSD periedematous results exits:
+    # check if the file with CSD periedematous results exists and is acceptable:
     if os.path.exists(periedematous_csd_path):
         row_periedematous_csd = np.load(periedematous_csd_path)
+    elif subj in onlyPT:
+        row_periedematous_csd = [np.nan]*6
     else: row_periedematous_csd = [np.nan]*6
     # check if the file with DTI peritumoral results exits:
     if os.path.exists(peritumoral_dti_path):
         row_peritumoral_dti = np.load(peritumoral_dti_path)
     else: row_peritumoral_dti = [np.nan]*8
-    # check if the file with DTI periedematous results exits:
+    # check if the file with DTI periedematous results exists and is acceptable:
     if os.path.exists(periedematous_dti_path):
         row_periedematous_dti = np.load(periedematous_dti_path)
+    elif subj in onlyPT:
+        row_periedematous_dti = [np.nan]*8
     else: row_periedematous_dti = [np.nan]*8
     # assemble full dataframe rows:
     row_peritumoral = {

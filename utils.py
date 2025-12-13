@@ -1,13 +1,3 @@
-# ==================================================================================================== #
-# --- DIPLOMA THESIS (utils.py) ---------------------------------------------------------------------- #
-# ==================================================================================================== #
-# title:         Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors #
-# author:        Bc. Martin KUKRÁL                                                                     #
-# supervision:   doc. Ing. Roman MOUČEK, Ph.D.                                                         #
-#                doc. MUDr. Irena HOLEČKOVÁ, Ph.D. (consultant)                                        #
-# academic year: 2024/2025                                                                             #
-# last updated:  2025-05-09                                                                            #
-# ==================================================================================================== #
 # ------------------------- #
 # Python version   3.11.4   #
 # ------------------------- #
@@ -1098,8 +1088,8 @@ class AnalysisToolkit():
             best_trial = min(study.best_trials, key=lambda trial: sum(trial.values))
             print(">>> OPTIMIZATION RESULTS")
             print(f"    best parameters: {best_trial.params}")
-            print(f"    T: {best_trial.values[0]}")
-            print(f"    S: {best_trial.values[1]}")
+            print(f"    1-T: {best_trial.values[0]}")
+            print(f"    S:   {best_trial.values[1]}")
             # retrieve the best parameters:
             params = [best_trial.params["metric"], best_trial.params["n_neigh"], best_trial.params["min_dist"]]
             end = time.time() # end time

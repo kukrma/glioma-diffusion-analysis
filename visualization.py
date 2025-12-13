@@ -1,13 +1,3 @@
-# ==================================================================================================== #
-# --- DIPLOMA THESIS (visualization.py) -------------------------------------------------------------- #
-# ==================================================================================================== #
-# title:         Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors #
-# author:        Bc. Martin KUKRÁL                                                                     #
-# supervision:   doc. Ing. Roman MOUČEK, Ph.D.                                                         #
-#                doc. MUDr. Irena HOLEČKOVÁ, Ph.D. (consultant)                                        #
-# academic year: 2024/2025                                                                             #
-# last updated:  2025-05-09                                                                            #
-# ==================================================================================================== #
 # Python version      3.11.4
 import numpy as np  # 1.25.2
 import pandas as pd # 2.1.0
