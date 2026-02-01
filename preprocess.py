@@ -83,19 +83,19 @@ print(f">>> TOTAL DTI COMPUTATION TIME: {dti_time:.3f} h") # around 1.6 h
 
 # 5) COMBINE EVERYTHING INTO A CSV FILE =======================================
 # subjects with distorted DWIs in ROIs:
-wrong = [43, 57, 66, 111, 158, 161, 166, 174, 179, 185, 195, 200, 201, 202, 208, 214, 223, 229,
-         267, 269, 270, 272, 291, 303, 307, 312, 318, 321, 327, 342, 347, 358, 364, 367, 391,
-         418, 420, 423, 438, 439, 442, 468, 477, 498, 507, 511, 517, 524, 533, 534, 535]
+wrong = [43, 57, 66, 161, 166, 179, 185, 201, 202, 214, 223, 229, 267, 269,
+         270, 272, 291, 303, 307, 312, 318, 327, 342, 358, 418, 420, 423, 438,
+         439, 442, 468, 477, 498, 511, 517, 524, 534, 535]
 # subjects that are distorted, but can be used for the peritumoral analysis:
 onlyPT = [111, 158, 174, 195, 200, 208, 321, 347, 364, 367, 391, 507, 533]
 # remove all wrong subjects from the dataframe:
-remove_wrong = [f"UCSF-PDGM-{num}" for num in wrong]
+remove_wrong = [f"UCSF-PDGM-{num:03d}" for num in wrong]
 data = data[~data["ID"].isin(remove_wrong)]
 # prepare the dataframes:
 columns = ["ID", "Sex", "Age", "Grade", "Type", "MGMTstatus", "MGMTindex", "1p/19q", "IDH", "AliveDead", "OS", "EoR", "Biopsy", # from the original data
            "Ratio", "NE", "GFAmed", "GFAiqr", "MAGmed", "MAGiqr",                                                               # from the CSD model
            "FAmed", "FAiqr", "MDmed", "MDiqr", "RDmed", "RDiqr", "ADmed", "ADiqr"]                                              # from the DTI model
-df_peritumoral = pd.DataFrame(columns=columns).set_index("ID")
+df_peritumoral = pd.DataFrame(columns=columns)
 df_periedematous = df_peritumoral.copy()
 # correct the original data:
 data["1p/19q"] = data["1p/19q"].replace("Co-deletion", "co-deletion")
@@ -110,23 +110,23 @@ for i, subj in enumerate(data["ID"]):
     # check if the file with CSD peritumoral results exits:
     if os.path.exists(peritumoral_csd_path):
         row_peritumoral_csd = np.load(peritumoral_csd_path)
-    else: row_peritumoral_csd = [np.nan]*6
+    else:
+        row_peritumoral_csd = [np.nan]*6
     # check if the file with CSD periedematous results exists and is acceptable:
-    if os.path.exists(periedematous_csd_path):
+    if os.path.exists(periedematous_csd_path) and int(id) not in onlyPT:
         row_periedematous_csd = np.load(periedematous_csd_path)
-    elif subj in onlyPT:
+    else:
         row_periedematous_csd = [np.nan]*6
-    else: row_periedematous_csd = [np.nan]*6
     # check if the file with DTI peritumoral results exits:
     if os.path.exists(peritumoral_dti_path):
         row_peritumoral_dti = np.load(peritumoral_dti_path)
-    else: row_peritumoral_dti = [np.nan]*8
+    else:
+        row_peritumoral_dti = [np.nan]*8
     # check if the file with DTI periedematous results exists and is acceptable:
-    if os.path.exists(periedematous_dti_path):
+    if os.path.exists(periedematous_dti_path) and int(id) not in onlyPT:
         row_periedematous_dti = np.load(periedematous_dti_path)
-    elif subj in onlyPT:
+    else:
         row_periedematous_dti = [np.nan]*8
-    else: row_periedematous_dti = [np.nan]*8
     # assemble full dataframe rows:
     row_peritumoral = {
         "ID": subj,
@@ -184,9 +184,15 @@ for i, subj in enumerate(data["ID"]):
         "RDiqr": row_periedematous_dti[5],
         "ADmed": row_periedematous_dti[6],
         "ADiqr": row_periedematous_dti[7]}
-    # append the rows to dataframes:
-    df_peritumoral.loc[len(df_peritumoral)] = row_peritumoral
-    df_periedematous.loc[len(df_periedematous)] = row_periedematous
+    # append the rows to dataframes, avoid rows with no diffusion property:
+    if ~np.all(np.isnan(list(row_peritumoral.values())[-13:])):
+        df_peritumoral.loc[len(df_peritumoral)] = row_peritumoral
+    else:
+        pass
+    if ~np.all(np.isnan(list(row_periedematous.values())[-13:])):
+        df_periedematous.loc[len(df_periedematous)] = row_periedematous
+    else:
+        pass
 # save the dataframes as CSV:
-preprocessing.change_labels(df_peritumoral, "Type", ["A-IDHmut", "A-IDHwt", "G-IDHwt", "O-IDHmut"]).to_csv("data/preprocessed/peritumoral.csv")
-preprocessing.change_labels(df_periedematous, "Type", ["A-IDHmut", "A-IDHwt", "G-IDHwt", "O-IDHmut"]).to_csv("data/preprocessed/periedematous.csv")
+preprocessing.change_labels(df_peritumoral, "Type", ["A-IDHmut", "A-IDHwt", "G-IDHwt", "O-IDHmut"]).to_csv("data/preprocessed/peritumoral.csv", index=False)
+preprocessing.change_labels(df_periedematous, "Type", ["A-IDHmut", "A-IDHwt", "G-IDHwt", "O-IDHmut"]).to_csv("data/preprocessed/periedematous.csv", index=False)

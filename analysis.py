@@ -8,6 +8,7 @@ analysis = utils.AnalysisToolkit()
 
 
 
+
 # 1) LOAD THE DATA ------------------------------------------------------------
 df_peritumoral = pd.read_csv("data/preprocessed/peritumoral.csv")     # peritumoral region
 df_periedematous = pd.read_csv("data/preprocessed/periedematous.csv") # periedematous region
@@ -30,9 +31,9 @@ analysis.correlation(df_periedematous, indices, False, "corr_spearman_periedemat
 analysis.correlation(df_periedematous, indices, True, "corr_dcorr_periedematous")     # distance correlation
 
 # 3) MANIFOLD LEARNING --------------------------------------------------------
-# extend the datasets with 2D UMAP embeddings (each takes around 1.5 minutes):
-params_peritumoral = ["euclidean", 9, 0.2543302859135638]   # optimal parameters from a previous run (peritumoral UMAP)
-params_periedematous = ["euclidean", 6, 0.2810460850731149] # optimal parameters from a previous run (periedematous UMAP)
+# extend the datasets with 2D UMAP embeddings (each optimization takes around 1.5 minutes):
+params_peritumoral = ["euclidean", 8, 0.3907937062042645]   # optimal parameters from a previous run (peritumoral UMAP)
+params_periedematous = ["euclidean", 7, 0.5117226608702747] # optimal parameters from a previous run (periedematous UMAP)
 df_peritumoral = analysis.umap_manifold(df_peritumoral, indices, n_trials=100, plots_name="peritumoral", params=params_peritumoral)         # remove "params" to repeat optimization
 df_periedematous = analysis.umap_manifold(df_periedematous, indices, n_trials=100, plots_name="periedematous", params=params_periedematous) # remove "params" to repeat optimization
 # better readability:
