@@ -10,12 +10,12 @@ analysis = utils.AnalysisToolkit()
 
 
 # 1) LOAD THE DATA ------------------------------------------------------------
-df_peritumoral = pd.read_csv("data/preprocessed/peritumoral.csv")     # peritumoral region
-df_periedematous = pd.read_csv("data/preprocessed/periedematous.csv") # periedematous region
-indices = range(14, 27)                                               # indices of diffusion data
+df_peritumoral = pd.read_csv("data/preprocessed/peritumoral.csv").dropna(subset="GFAmed")     # peritumoral region
+df_periedematous = pd.read_csv("data/preprocessed/periedematous.csv").dropna(subset="GFAmed") # periedematous region
+indices = range(14, 27) # indices of diffusion data
 # print number of samples:
-print("samples with all peritumoral diffusion properties:   ", len(df_peritumoral.dropna(subset="GFAmed")))
-print("samples with all periedematous diffusion properties: ", len(df_periedematous.dropna(subset="GFAmed")))
+print("samples with all peritumoral diffusion properties:   ", len(df_peritumoral))
+print("samples with all periedematous diffusion properties: ", len(df_periedematous))
 
 # 2) EXPLORATORY ANALYSIS -----------------------------------------------------
 # plot the ratios:
