@@ -78,11 +78,11 @@ class PreprocessingToolkit():
         --------------------------------------------------------------------------------------------------------------------
         PARAMETER       DTYPE           DESCRIPTION
         --------------------------------------------------------------------------------------------------------------------
-        moving_path   | string        | path to the NIfTY file which will get registered
-        target_path   | string        | path to the NIfTY file used as target for the registration
-        output_path   | string / None | path to where the output NIfTY file will be saved
+        moving_path   | string        | path to the NIfTI file which will get registered
+        target_path   | string        | path to the NIfTI file used as target for the registration
+        output_path   | string / None | path to where the output NIfTI file will be saved
                       |               | (if set to None, the file will not be saved)
-        brain_path    | string / None | path to the NIfTY file containing binary brain mask
+        brain_path    | string / None | path to the NIfTI file containing binary brain mask
                       |               | (if set to None, no masking will take place)
         type          | string        | type of registration (see ANTsPy docs)
         interpolation | string        | type of interpolation (see ANTsPy docs)
@@ -90,7 +90,7 @@ class PreprocessingToolkit():
                       |               | "S" = along sagittal plane, "F" = along frontal plane, "T" = along transversal plane
                       |               | (if set to None, no flips will be performed)
         --------------------------------------------------------------------------------------------------------------------
-        RETURN >> output_nib - NIfTY image of the registered output
+        RETURN >> output_nib - NIfTI image of the registered output
                >> transform  - transformations used during registration
         --------------------------------------------------------------------------------------------------------------------
         Used to perform the registration of DWI data to the patient-specific space to get overlap with tumor segmentation.
@@ -104,7 +104,7 @@ class PreprocessingToolkit():
         # 1) LOAD IMAGES ------------------------------------------------------
         print("    loading images...")
         moving_img = ants.image_read(moving_path)  # moving image for ANTsPy
-        target_nib = nib.load(target_path)         # target image NIfTY
+        target_nib = nib.load(target_path)         # target image NIfTI
         target_img = ants.from_nibabel(target_nib) # target image for ANTsPy
         
         # 2) FLIP IMAGES (optional) -------------------------------------------
@@ -151,16 +151,16 @@ class PreprocessingToolkit():
             output = [volume*brain_img for volume in tqdm(output, bar_format="    masking brain ({n_fmt}/{total_fmt})...")]
 
         # 6) FINALIZE ---------------------------------------------------------
-        # make NIfTY image:
+        # make NIfTI image:
         output_nib = nib.Nifti1Image(np.stack(output, axis=-1), target_nib.affine, target_nib.header, target_nib.extra)
-        # optionally save the NIfTY file:
+        # optionally save the NIfTI file:
         if output_path:
             print("    saving output...")
             nib.save(output_nib, output_path)
         # print time:
         end = time.time()
         print(f"    time: {end-start:.3f} s")
-        # return the NIfTY image and transformation:
+        # return the NIfTI image and transformation:
         return output_nib, transform
     
 
@@ -169,18 +169,18 @@ class PreprocessingToolkit():
         ---------------------------------------------------------------------------------------------------
         PARAMETER         DTYPE           DESCRIPTION
         ---------------------------------------------------------------------------------------------------
-        tumor_path      | string        | path to the NIfTY file containing tumor segmentation
-        brain_path      | string        | path to the NIfTY file containing binary brain mask
+        tumor_path      | string        | path to the NIfTI file containing tumor segmentation
+        brain_path      | string        | path to the NIfTI file containing binary brain mask
         type            | string        | what ROI is to be generated, options:
                         |               | "peritumoral" = around tumor mass, "periedematous" = around edema
-        output_path     | string / None | path to where the output NIfTY file with ROI will be saved
+        output_path     | string / None | path to where the output NIfTI file with ROI will be saved
                         |               | (if set to None, the file will not be saved)
-        parenchyma_path | string / None | path to the NIfTY file containing brain parenchyma
+        parenchyma_path | string / None | path to the NIfTI file containing brain parenchyma
                         |               | (if set to None, parenchyma is not masked)
         radius          | int           | thickness (i.e. distance from tumor/edema) of the ROI
         closing_size    | int           | size of the cube used for parenchyma closing
         ---------------------------------------------------------------------------------------------------
-        RETURN >> roi_nib - NIfTY image with ROI
+        RETURN >> roi_nib - NIfTI image with ROI
         ---------------------------------------------------------------------------------------------------
         Used to generate ROIs around tumors and edemas.
         '''
@@ -191,7 +191,7 @@ class PreprocessingToolkit():
 
         # 1) LOAD IMAGES ------------------------------------------------------
         print("    loading images...")
-        tumor_nib = nib.load(tumor_path)              # tumor segmentation NIfTY
+        tumor_nib = nib.load(tumor_path)              # tumor segmentation NIfTI
         brain_mask = nib.load(brain_path).get_fdata() # binary brain mask
         # preprocess the mask based on "type" parameter:
         if type == "peritumoral":
@@ -223,16 +223,16 @@ class PreprocessingToolkit():
             roi = np.logical_and(roi, parenchyma_roi_closed).astype(np.uint8)      # clip ROI to closed parenchyma
 
         # 3) FINALIZE ---------------------------------------------------------
-        # make NIfTY image:
+        # make NIfTI image:
         roi_nib = nib.Nifti1Image(roi, tumor_nib.affine, tumor_nib.header, tumor_nib.extra)
-        # optionally save the NIfTY file:
+        # optionally save the NIfTI file:
         if output_path:
             print("    saving output...")
             nib.save(roi_nib, output_path)
         # print time:
         end = time.time()
         print(f"    time: {end-start:.3f} s")
-        # return the NIfTY image:
+        # return the NIfTI image:
         return roi_nib
         
 
@@ -241,10 +241,10 @@ class PreprocessingToolkit():
         --------------------------------------------------------------------------------------
         PARAMETER     DTYPE           DESCRIPTION
         --------------------------------------------------------------------------------------
-        dwi_path    | string        | path to the NIfTY file containing DWI
+        dwi_path    | string        | path to the NIfTI file containing DWI
         bval_path   | string        | path to the file containing b-values
         bvec_path   | string        | path to the file containing gradient directions
-        roi_path    | string / None | path to the NIfTY file containing ROI
+        roi_path    | string / None | path to the NIfTI file containing ROI
                     |               | (if set to None, calculate CSD for the entire DWI)
         output_path | string / None | path (no file extension) to where the data will be saved
                     |               | (if set to None, the data will not be saved)
@@ -265,7 +265,7 @@ class PreprocessingToolkit():
         start = time.time()
 
         # 1) PREPARE DATA AND GRADIENT TABLE ----------------------------------
-        dwi_nib = nib.load(dwi_path)  # DWI data as NIfTY image
+        dwi_nib = nib.load(dwi_path)  # DWI data as NIfTI image
         dwi_img = dwi_nib.get_fdata() # DWI data
         # prepare ROI if given:
         if roi_path:
@@ -337,10 +337,10 @@ class PreprocessingToolkit():
         --------------------------------------------------------------------------------------
         PARAMETER     DTYPE           DESCRIPTION
         --------------------------------------------------------------------------------------
-        dwi_path    | string        | path to the NIfTY file containing DWI
+        dwi_path    | string        | path to the NIfTI file containing DWI
         bval_path   | string        | path to the file containing b-values
         bvec_path   | string        | path to the file containing gradient directions
-        roi_path    | string / None | path to the NIfTY file containing ROI
+        roi_path    | string / None | path to the NIfTI file containing ROI
                     |               | (if set to None, calculate CSD for the entire DWI)
         output_path | string / None | path (no file extension) to where the data will be saved
                     |               | (if set to None, the data will not be saved)
@@ -359,7 +359,7 @@ class PreprocessingToolkit():
         start = time.time()
 
         # 1) PREPARE DATA AND GRADIENT TABLE ----------------------------------
-        dwi_nib = nib.load(dwi_path)  # DWI data as NIfTY image
+        dwi_nib = nib.load(dwi_path)  # DWI data as NIfTI image
         dwi_img = dwi_nib.get_fdata() # DWI data
         # prepare ROI if given:
         if roi_path:
@@ -890,7 +890,7 @@ class VisualizationToolkit():
         PARAMETER   DTYPE             DESCRIPTION
         --------------------------------------------------------
         csd_fit   | dipy.SphHarmFit | fitted CSD model
-        roi_path  | string          | path to the ROI NIfTY file 
+        roi_path  | string          | path to the ROI NIfTI file 
         number    | int             | fODF number
         --------------------------------------------------------
         RETURN xxx
