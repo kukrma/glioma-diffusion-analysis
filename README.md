@@ -90,7 +90,6 @@ The file `utils.py` is called by all other scripts and organizes the functionali
 ## Original Directory Tree
 The provided source code contains paths to various files, and so it is deemed necessary to provide the project directory tree for easier replication or modification:
 ```
-DPthesis/
 ├── data/
 │   ├── preprocessed/
 │   │   ├── csd/
