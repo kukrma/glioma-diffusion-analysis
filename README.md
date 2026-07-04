@@ -1,11 +1,15 @@
 # Analysis of Peritumoral and Periedematous Diffusion Properties in Brain Gliomas Using the UCSF-PDGM Dataset
 This GitHub repository contains the code and derived data related to the academic article *Latent structure in peritumoral diffusion properties revealed by manifold learning and cluster analysis in adult-type diffuse gliomas*, which is currently in works. Once published, the necessary links to the article will be added.
 
-The associated research was submitted as a poster on 14th December 2025 to the **Organization of Human Brain Mapping (OHBM) 2026 Annual Meeting** in Bordeaux (FR), scheduled to take place on 14th–18th June 2026. The poster has been accepted and will be presented at the congress. Because the code and results might change due to article revisions and final changes, the state of this repository during poster submission is archived in the form of a release. Links will be added to the poster after the congress.
+The associated research was submitted as a poster on 2025-12-14 to the **Organization of Human Brain Mapping (OHBM) 2026 Annual Meeting** in Bordeaux (FR), scheduled to take place from 2026-06-14 to 2026-06-18. The poster was accepted and presented at the congress. Because the code and results might change due to article revisions and final changes, the state of this repository during poster submission is archived in the form of a release. The submitted material can be accessed either as an abstract in the published abstract book, or as a poster provided on ResearchGate:
 
-The code was originally used in the diploma thesis *Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors* produced at the **Department of Computer Science and Engineering, Faculty of Applied Sciences, University of West Bohemia**. The state of this repository during thesis submission and defense is also archived in the form of a release. The thesis was successfully defended on 16th June 2025 and can be accessed from URL:
+[<img src="https://img.shields.io/badge/Abstract Book-10.5281/zenodo.20817055-2776AD.svg?logo=LOGO">](https://doi.org/10.5281/zenodo.20817055)
 
-[<img src="https://img.shields.io/badge/UWB-ID 99620-royalblue.svg?logo=LOGO">](https://portal.zcu.cz/StagPortletsJSR168/CleanUrl?urlid=prohlizeni-prace-detail&praceIdno=99620)
+[<img src="https://img.shields.io/badge/Poster-Available on ResearchGate-00CCBA.svg?logo=LOGO">](https://www.researchgate.net/publication/407353932_Cluster_Analysis_of_Peritumoral_Diffusion_Properties_Indicates_Latent_Glioma_Subtypes)
+
+The code was originally used in the diploma thesis *Analysis of White Matter Diffusion Properties in the Context of Selected Brain Tumors* produced at the **Department of Computer Science and Engineering, Faculty of Applied Sciences, University of West Bohemia**. The state of this repository during thesis submission and defense is also archived in the form of a release. The thesis was successfully defended on 2025-06-15 and can be accessed from URL:
+
+[<img src="https://img.shields.io/badge/Master's Thesis (UWB)-ID 99620-royalblue.svg?logo=LOGO">](https://portal.zcu.cz/StagPortletsJSR168/CleanUrl?urlid=prohlizeni-prace-detail&praceIdno=99620)
 
 [![CC BY-NC 4.0][cc-by-nc-shield]][cc-by-nc]
 
