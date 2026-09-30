@@ -1,5 +1,5 @@
 # Analysis of Peritumoral and Periedematous Diffusion Properties in Brain Gliomas Using the UCSF-PDGM Dataset
-This GitHub repository contains the code and derived data related to the academic article *Latent structure in peritumoral diffusion properties revealed by manifold learning and cluster analysis in adult-type diffuse gliomas*, which is currently in works. Once published, the necessary links to the article will be added.
+This GitHub repository contains the code and derived data related to an academic article, which is currently in works. Once published, the necessary links will be added.
 
 The associated research was submitted as a poster on 2025-12-14 to the **Organization of Human Brain Mapping (OHBM) 2026 Annual Meeting** in Bordeaux (FR), scheduled to take place from 2026-06-14 to 2026-06-18. The poster was accepted and presented at the congress. Because the code and results might change due to article revisions and final changes, the state of this repository during poster submission is archived in the form of a release. The submitted material can be accessed either as an abstract in the published abstract book, or as a poster provided on ResearchGate:
 
