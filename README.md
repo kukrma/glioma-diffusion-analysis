@@ -1,3 +1,5 @@
+<mark>The manuscript is in the process of major revision.</mark>
+
 # Analysis of Peritumoral and Periedematous Diffusion Properties in Brain Gliomas Using the UCSF-PDGM Dataset
 This GitHub repository contains the code and derived data related to an academic article, which is currently in works. Once published, the necessary links will be added.
 
